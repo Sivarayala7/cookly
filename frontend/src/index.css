@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties for Design System */
+:root {
+  --font-serif: "Playfair Display", "DM Serif Display", "Times New Roman", serif;
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --green-primary: #06B56C;
+  --green-dark: #00A15C;
+  --orange: #FF8C44;
+  --yellow: #F5BB33;
+  --text-dark: #111;
+  --text-body: #333;
+  --surface-base: #FFF;
+  --surface-subtle: #EDEFF5;
+}
+
+/* Typography System */
+h1 {
+  font: 600 clamp(48px, 5vw + 1rem, 72px)/1.1 var(--font-serif);
+  font-style: italic;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font: 600 32px/1.25 var(--font-sans);
+}
+
+body, p, li {
+  font: 400 16px/1.6 var(--font-sans);
+}
+
+/* Custom Button Styles */
+.btn {
+  @apply inline-block px-6 py-3 rounded-full font-semibold transition-all duration-150 ease-out;
+}
+
+.btn-primary {
+  @apply bg-green-primary text-white hover:shadow-lg hover:-translate-y-0.5;
+}
+
+.btn-dark {
+  @apply bg-black text-white hover:shadow-lg hover:-translate-y-0.5;
+}
+
+/* Card Components */
+.recipe-card {
+  @apply bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Dark mode overrides */
+.dark {
+  --surface-base: #1a1a1a;
+  --surface-subtle: #2a2a2a;
+  --text-dark: #ffffff;
+  --text-body: #e5e5e5;
+}
