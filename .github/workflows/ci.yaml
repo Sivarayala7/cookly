@@ -3,23 +3,24 @@ name: CI
 on:
   push:
     branches:
-      - main  # Trigger on pushes to main branch
+      - main
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest  # Use latest Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '18'  # Set Node version you use
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm install
+          npm test
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm install
+          npm test
