@@ -1,9 +1,3 @@
-/**
- * Main server entry ────────────────────────────────────────────────
- * ① boots the express app        // comment #1
- * ② connects to MongoDB          // comment #2
- */
-
 import express from 'express';                // import core framework // comment #1
 import dotenv from 'dotenv/config';           // load .env variables   // comment #2
 import morgan from 'morgan';                  // dev request logger    // comment #3

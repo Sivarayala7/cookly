@@ -7,14 +7,13 @@ export const useAuthStore = create((set, get) => ({
   token: null,
   isLoading: false,
   isAuthenticated: false,
-  authLoading: true, // Add this to track initialization
+  authLoading: true,
   followedUsers: [],
 
   /* ---------- helpers ---------- */
   _saveCredentials: ({ token, user }) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
-    // Don't set on api.defaults here since api.js handles it with interceptors
   },
 
   /* ---------- life-cycle ---------- */
@@ -54,7 +53,6 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  // Add setUser method
   setUser: (user) => {
     localStorage.setItem('user', JSON.stringify(user));
     set({ user });
@@ -138,6 +136,35 @@ export const useAuthStore = create((set, get) => ({
       return { success: true, user: { ...res.data, isFollowing } };
     } catch (err) {
       toast.error('Failed to fetch user');
+      return { success: false };
+    }
+  },
+
+  /* ---------- account deletion ---------- */
+  deleteAccount: async () => {
+    set({ isLoading: true });
+    try {
+      await api.delete('/users/me');
+      
+      // Clear all local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // Reset store state
+      set({ 
+        user: null, 
+        token: null, 
+        isAuthenticated: false, 
+        followedUsers: [],
+        authLoading: false,
+        isLoading: false 
+      });
+      
+      toast.success('Account deleted successfully');
+      return { success: true };
+    } catch (err) {
+      set({ isLoading: false });
+      toast.error(err.response?.data?.message || 'Failed to delete account');
       return { success: false };
     }
   }

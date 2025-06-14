@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { User, Mail, MapPin, Lock, Bell, Shield, Trash2, Eye, EyeOff, Moon, Sun } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useUIStore } from '../store/uiStore';
+import { useNavigate } from 'react-router-dom';
 const Settings = () => {
-  const { user, updateProfile } = useAuthStore();
+  const { user, updateProfile,deleteAccount} = useAuthStore();
   const { darkMode, toggleDarkMode } = useUIStore();
   const [activeTab, setActiveTab] = useState('profile');
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -57,6 +59,13 @@ const Settings = () => {
       ...prev,
       [key]: !prev[key]
     }));
+  };
+
+   const handleDeleteAccount = async () => {
+    const result = await deleteAccount();
+    if (result.success) {
+      navigate('/');
+    }
   };
 
   // Save profile changes with validation
@@ -462,7 +471,7 @@ const Settings = () => {
                           <li>Your bookmarks and favorites</li>
                         </ul>
                       </div>
-                      <button className="btn bg-red-600 text-white hover:bg-red-700 flex items-center space-x-2">
+                      <button  onClick={handleDeleteAccount} className="btn bg-red-600 text-white hover:bg-red-700 flex items-center space-x-2">
                         <Trash2 size={16} />
                         <span>Delete Account</span>
                       </button>
