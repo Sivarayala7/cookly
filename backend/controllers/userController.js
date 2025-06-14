@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import Recipe from '../models/Recipe.js';
+import Comment from '../models/Comment.js';
 
 /** 1) GET /api/users/me */
 export const getMe = async (req, res, next) => {
@@ -86,5 +87,36 @@ export const changePassword = async (req, res, next) => {
     res.json({ message: 'Password updated successfully' });
   } catch (err) {
     next(err);
+  }
+};
+
+export const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Delete all user's recipes first (this will cascade delete comments)
+    await Recipe.deleteMany({ author: userId });
+    
+    // Delete all comments made by the user on other recipes
+    await Comment.deleteMany({ author: userId });
+    
+    // Remove user from all followers/following lists
+    await User.updateMany(
+      { followers: userId },
+      { $pull: { followers: userId } }
+    );
+    
+    await User.updateMany(
+      { following: userId },
+      { $pull: { following: userId } }
+    );
+    
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+    
+    res.json({ message: 'Account deleted successfully' });
+  } catch (error) {
+    console.error('Delete account error:', error);
+    res.status(500).json({ message: 'Failed to delete account' });
   }
 };

@@ -7,6 +7,7 @@ import {
   updateMe,
   changePassword,
   getUserRecipes,
+  deleteAccount
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -18,6 +19,7 @@ const router = express.Router();
 // 4) GET  /api/users/me/recipes  → list your own recipes
 router.get('/me', protect, getMe);
 router.put('/me', protect, updateMe);
+router.delete('/me', protect, deleteAccount);
 router.get('/me/recipes', protect, getMyRecipes);
 
 // ── Public user routes (dynamic) ───────────────────────────────────────
